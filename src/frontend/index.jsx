@@ -12,7 +12,6 @@ const Config = () => {
     );
   };
 const App = () => {
-  const [context, setContext] = useState(null);
   const [hashtag, setHashtag] = useState(null);
   const [hashtagName, setHashtagName] = useState(null);
   const [user, setUser] = useState(null);
@@ -30,13 +29,9 @@ const App = () => {
       // a user can undertake in a 7 day period so we're going to prevent the user from
       // exceeding this by limiting it via hard coding
       invoke('getHashtag', { search: 'catlassians', user: user.accounts.data[0].instagram_business_account.id }).then(setHashtag);
-
     }
   }, [user]);
 
-  useEffect(() => {
-    view.getContext().then(setContext);
-  }, []);
 
   useEffect(() => {
     console.log(hashtag)  

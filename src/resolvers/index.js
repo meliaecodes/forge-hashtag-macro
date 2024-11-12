@@ -68,7 +68,7 @@ resolver.define('getHashtag', async (req) => {
   } 
 
   console.log("search: " + search)
-  const response = await ravelry.fetch('/ig_hashtag_search?user_id=' + req.payload.user + '&q=' + search)
+  let response = await ravelry.fetch('/ig_hashtag_search?user_id=' + req.payload.user + '&q=' + search)
   if (response.ok) {
     const hashtag_id = await response.json()
     console.log('getHashtag id')
@@ -76,12 +76,22 @@ resolver.define('getHashtag', async (req) => {
     return(hashtag_id);
     
   } else {
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      text: await response.text(),
+    console.log(response)
+    console.log(response.status)
+
+    if(response.status === 400) {
+        console.log("no results found, reverting to " + req.payload.search)
+        response = await ravelry.fetch('/ig_hashtag_search?user_id=' + req.payload.user + '&q=' + req.payload.search)
+        const backup_hashtag = await response.json()
+        return(backup_hashtag);
+    } else {
+      return {
+        status: response.status,
+        statusText: response.statusText,
+        text: await response.text(),
     }
   } 
+}
 });
 
 resolver.define('getUser', async (req) => {
