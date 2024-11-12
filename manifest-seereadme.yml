@@ -1,0 +1,65 @@
+modules:
+  macro:
+    - key: forge-hashtag-macro-hello-world-macro
+      resource: main
+      render: native
+      resolver:
+        function: resolver
+      title: forge-hashtag-macro
+      config: true
+  function:
+    - key: resolver
+      handler: index.handler
+      providers: 
+        auth: 
+          - instagram
+resources:
+  - key: main
+    path: src/frontend/index.jsx
+app:
+  runtime:
+    name: nodejs20.x
+  id: <replace with your app id>
+providers:
+  auth:
+    - key: instagram
+      name: Instagram
+      type: oauth2
+      clientId: '<replace with your client id>'
+      scopes: 
+        - 'public_profile'
+      remotes:
+        - facebook-graph
+      bearerMethod: authorization-header
+      actions:
+        authorization:
+          remote: facebook
+          path: /dialog/oauth
+          queryParameters:
+            display: page
+            config_id: '<replace with your config id>'
+            extras: '{"setup":{"channel":"IG_API_ONBOARDING"}}'
+        exchange: 
+          remote: facebook-graph
+          path: /oauth/access_token
+        retrieveProfile:
+          remote: facebook-graph
+          path: /me
+          resolvers:
+            id: id
+            displayName: name
+remotes:
+  - key: facebook
+    baseUrl: https://www.facebook.com
+  - key: facebook-graph
+    baseUrl: https://graph.facebook.com
+permissions:
+  external:
+    images:
+      - '*.cdninstagram.com'
+    fetch:
+      backend:
+        - https://www.facebook.com
+        - https://graph.facebook.com
+  scopes: []
+  
