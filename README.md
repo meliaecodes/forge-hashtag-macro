@@ -2,6 +2,8 @@
 
 This project contains a Forge app written in Javascript that displays instagram posts in a Confluence macro. 
 
+![Image](./images/hashtag-macro.png)
+
 See [developer.atlassian.com/platform/forge/](https://developer.atlassian.com/platform/forge) for documentation and tutorials explaining Forge.
 
 ## Requirements
